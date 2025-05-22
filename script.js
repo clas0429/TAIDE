@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 上傳相關元素
     const essayUpload = document.getElementById('essayUpload');
+    const imageUploadBtn = document.getElementById('imageUpload'); // Get reference to the new button
     const fileList = document.getElementById('fileList');
     const startCorrectionBtn = document.getElementById('startCorrection');
     const essayTableBody = document.querySelector('#essayTable tbody');
@@ -75,6 +76,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- 檔案上傳與顯示 ---
     let uploadedFiles = [];
+
+    if (imageUploadBtn && essayUpload) {
+        imageUploadBtn.addEventListener('click', () => {
+            essayUpload.click(); // Programmatically click the hidden file input
+        });
+    }
 
     essayUpload.addEventListener('change', (event) => {
         fileList.innerHTML = ''; // 清空現有列表
