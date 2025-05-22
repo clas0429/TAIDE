@@ -149,6 +149,14 @@ input[type="file"] {
     font-size: 1.1rem;
     display: inline-block;
     transition: background-color 0.3s ease, transform 0.2s ease;
+    border: none; /* Ensure buttons with this class have no default border */
+    font-family: var(--font-family-body); /* Ensure font consistency with labels */
+}
+
+/* Explicitly style button elements with .upload-button class if needed for overrides */
+button.upload-button {
+    /* Any specific overrides for button elements if they render differently */
+    /* For now, relying on the above border:none and font-family inheritance */
 }
 
 .upload-button:hover {

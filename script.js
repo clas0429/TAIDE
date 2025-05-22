@@ -78,12 +78,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
     essayUpload.addEventListener('change', (event) => {
         fileList.innerHTML = ''; // 清空現有列表
-        uploadedFiles = Array.from(event.target.files);
-        if (uploadedFiles.length > 0) {
-            uploadedFiles.forEach(file => {
+        uploadedFiles = []; // Reset uploaded files array
+        const files = Array.from(event.target.files);
+
+        if (files.length > 0) {
+            files.forEach(file => {
                 const fileDiv = document.createElement('div');
-                fileDiv.textContent = file.name;
+                fileDiv.textContent = file.name; // Initial display
                 fileList.appendChild(fileDiv);
+
+                if (file.type.startsWith('image/')) {
+                    // Handle image files
+                    fileDiv.textContent = `圖片稿件 ${file.name} - 正在辨識中...`;
+                    
+                    setTimeout(() => {
+                        const studentName = `圖片學生 ${Math.floor(Math.random() * 100) + 1}`;
+                        const essayTitle = `我的圖片日記 ${Math.floor(Math.random() * 10) + 1}`;
+                        const mockText = `這是從圖片 ${file.name} 辨識出的模擬文字內容。\n學生姓名：${studentName}\n作文題目：${essayTitle}\n內容：今天天氣真好，我們去了公園玩。公園裡有很多花草樹木，非常美麗。我畫了一幅畫，記錄下這美好的時刻。希望下次還能再來。`;
+                        
+                        const ocrResult = {
+                            name: `ocr_result_for_${file.name.split('.')[0]}.txt`,
+                            mockText: mockText,
+                            isOcrResult: true,
+                            originalFileName: file.name,
+                            studentName: studentName, // Store for later use
+                            essayTitle: essayTitle // Store for later use
+                        };
+                        uploadedFiles.push(ocrResult);
+                        fileDiv.textContent = `[辨識完成] ${ocrResult.name} (原圖: ${file.name})`;
+                    }, 2500); // Simulate 2.5 seconds OCR processing
+                } else {
+                    // Handle non-image files
+                    uploadedFiles.push(file); // Add original file object
+                }
             });
         } else {
             fileList.textContent = '未選擇任何作文稿件。';
@@ -91,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // 拖曳上傳功能
-    const uploadArea = document.querySelector('.upload-area'); // 修正：確保 uploadArea 已被正確定義
+    const uploadArea = document.querySelector('.upload-area');
     uploadArea.addEventListener('dragover', (e) => {
         e.preventDefault();
         uploadArea.style.borderColor = getComputedStyle(document.documentElement).getPropertyValue('--primary-color'); // 使用 getComputedStyle
@@ -118,18 +145,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 模擬後端批改結果，新增寫作能力指標
         const mockResults = uploadedFiles.map((file, index) => {
-            const studentName = `同學 ${index + 1}`;
-            const essayTitle = file.name.replace(/\.(docx|pdf|txt)$/i, '');
+            let studentName, essayTitle, essayContent;
+
+            if (file.isOcrResult) {
+                studentName = file.studentName || `圖片學生 ${index + 1}`;
+                essayTitle = file.essayTitle || file.name.replace(/\.txt$/i, '').replace(/^ocr_result_for_/i, '');
+                essayContent = file.mockText;
+            } else {
+                studentName = `同學 ${index + 1}`;
+                // Attempt to extract a more meaningful title if possible, otherwise use filename
+                const nameParts = file.name.split('.');
+                nameParts.pop(); // remove extension
+                essayTitle = nameParts.join('.') || `作文 ${index + 1}`;
+                essayContent = `模擬的 '${file.name}' 文件內容。`; // Placeholder for actual content if we were reading files
+            }
+
             const grade = ['A', 'B', 'C', 'D'][Math.floor(Math.random() * 4)];
             const score = Math.floor(Math.random() * 41) + 60; // 60-100 分
-            const feedback = `這篇作文《${essayTitle}》立意新穎，結構完整，值得肯定。但在遣詞造句方面可再推敲，避免重複。建議多閱讀名家作品，提升語言表達力。`;
+            // Use essayContent in feedback if needed, here we just use title.
+            const feedback = `這篇作文《${essayTitle}》立意新穎，結構完整，值得肯定。但在遣詞造句方面可再推敲，避免重複。建議多閱讀名家作品，提升語言表達力。\nOCR內容參考:\n${file.isOcrResult ? essayContent.substring(0,100)+'...' : '(非圖片辨識文件)'}`;
             const abilityScores = {
                 topic: Math.floor(Math.random() * 5) + 1, // 審題立意 1-5
                 structure: Math.floor(Math.random() * 5) + 1, // 內容組織 1-5
                 vocabulary: Math.floor(Math.random() * 5) + 1, // 遣詞造句 1-5
                 mechanics: Math.floor(Math.random() * 5) + 1, // 錯別字/標點 1-5
             };
-            return { studentName, essayTitle, grade, score, feedback, abilityScores };
+            // Store the full content (mock or otherwise) for potential use in the modal
+            return { studentName, essayTitle, grade, score, feedback, abilityScores, fullContent: essayContent, isOcr: !!file.isOcrResult, originalFileName: file.originalFileName };
         });
 
         mockResults.forEach(result => {
@@ -137,11 +179,17 @@ document.addEventListener('DOMContentLoaded', () => {
             row.dataset.originalFeedback = result.feedback;
             row.dataset.originalGrade = result.grade;
             row.dataset.originalScore = result.score;
-            row.dataset.originalAbilityScores = JSON.stringify(result.abilityScores); // 將對象存為 JSON 字串
+            row.dataset.originalAbilityScores = JSON.stringify(result.abilityScores);
+            row.dataset.fullContent = result.fullContent; // Store full content
+            row.dataset.isOcr = result.isOcr;
+            if(result.isOcr) row.dataset.originalFileName = result.originalFileName;
+
+
+            let titleDisplay = result.isOcr ? `《${result.essayTitle}》 (原圖: ${result.originalFileName})` : `《${result.essayTitle}》`;
 
             row.innerHTML = `
                 <td>${result.studentName}</td>
-                <td>《${result.essayTitle}》</td>
+                <td>${titleDisplay}</td>
                 <td class="grade">${result.grade}</td>
                 <td class="score">${result.score}</td>
                 <td class="feedback">${result.feedback.substring(0, 40)}...</td> <td class="action-buttons">
@@ -167,15 +215,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 const currentAbilityScores = JSON.parse(currentEditingRow.dataset.originalAbilityScores || '{}'); // 解析能力指標
 
                 originalFeedbackTextarea.value = originalFeedback;
-                correctedFeedbackTextarea.value = currentFeedback; // 預設顯示當前評語
+                // If correctedFeedback exists, use it, otherwise use original.
+                // For OCR, the "originalFeedback" IS the AI generated one based on OCR text.
+                correctedFeedbackTextarea.value = currentEditingRow.dataset.correctedFeedback || originalFeedback;
                 correctedGradeSelect.value = currentGrade;
                 correctedScoreInput.value = currentScore;
 
                 // 填充能力指標
+                const abilityScoresToDisplay = currentEditingRow.dataset.correctedAbilityScores ?
+                    JSON.parse(currentEditingRow.dataset.correctedAbilityScores) :
+                    currentAbilityScores;
+
                 abilityScoreInputs.forEach(input => {
                     const ability = input.dataset.ability;
-                    input.value = currentAbilityScores[ability] || '';
+                    input.value = abilityScoresToDisplay[ability] || '';
                 });
+                
+                // Potentially display full OCR content in the modal if needed
+                // For now, originalFeedbackTextarea shows the AI feedback which includes a snippet of OCR.
 
                 feedbackModal.style.display = 'flex';
             };
