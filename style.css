@@ -1,0 +1,602 @@
+/* 通用樣式 */
+:root {
+    --primary-color: #3f51b5; /* 深藍色，沉穩 */
+    --secondary-color: #607d8b; /* 藍灰色，雅緻 */
+    --accent-color: #8bc34a; /* 淺綠色，活力 */
+    --text-color: #212121; /* 更深的文字顏色 */
+    --bg-color: #eceff1; /* 淺灰背景 */
+    --card-bg: #fff;
+    --border-color: #cfd8dc; /* 淺邊框色 */
+    --danger-color: #f44336; /* 紅色 */
+    --font-family-body: 'Segoe UI', 'Microsoft JhengHei', Arial, sans-serif;
+    --font-family-heading: 'Noto Sans CJK TC', 'Microsoft JhengHei', sans-serif; /* 考慮更具中文美感的字體 */
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-family-body);
+    line-height: 1.6;
+    color: var(--text-color);
+    background: var(--bg-color);
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+    overflow: hidden;
+    padding: 20px 0;
+}
+
+/* Header */
+header {
+    background: var(--primary-color);
+    color: #fff;
+    padding: 1.2rem 0; /* 稍微增加高度 */
+    box-shadow: 0 3px 6px rgba(0,0,0,0.15); /* 更明顯的陰影 */
+}
+
+header h1 {
+    display: inline-block;
+    margin-right: 30px;
+    font-size: 2rem; /* 標題字體更大 */
+    font-family: var(--font-family-heading);
+    letter-spacing: 1px;
+}
+
+header h1 i {
+    margin-right: 12px;
+    color: var(--accent-color); /* 圖標顏色點綴 */
+}
+
+header nav {
+    display: inline-block;
+    float: right;
+}
+
+header nav ul {
+    list-style: none;
+}
+
+header nav ul li {
+    display: inline;
+    margin-left: 25px; /* 導航間距大一點 */
+}
+
+header nav ul li a {
+    color: #e3f2fd; /* 淺一點的白色 */
+    text-decoration: none;
+    font-weight: 500; /* 中等粗細 */
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+header nav ul li a:hover {
+    color: var(--accent-color);
+    transform: translateY(-2px); /* 懸浮效果 */
+}
+
+header nav ul li a i {
+    margin-right: 8px;
+}
+
+/* Main Content */
+main {
+    padding: 25px 0;
+}
+
+section {
+    background: var(--card-bg);
+    padding: 35px; /* 內邊距更多 */
+    margin-bottom: 25px;
+    border-radius: 10px; /* 更圓潤的邊角 */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* 更柔和的陰影 */
+}
+
+section.hidden-section {
+    display: none;
+}
+
+h2 {
+    color: var(--primary-color);
+    margin-bottom: 30px;
+    font-size: 2rem;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 15px;
+    font-family: var(--font-family-heading);
+}
+
+h2 i {
+    margin-right: 15px;
+    color: var(--secondary-color);
+}
+
+/* Upload Area */
+.upload-area {
+    border: 3px dashed var(--border-color); /* 邊框粗一點 */
+    padding: 50px;
+    text-align: center;
+    border-radius: 10px;
+    margin-bottom: 35px;
+    background-color: #fcfdfe;
+    transition: border-color 0.3s ease;
+}
+
+.upload-area:hover {
+    border-color: var(--primary-color);
+}
+
+.upload-area p {
+    margin-bottom: 25px;
+    font-size: 1.15rem;
+    color: var(--text-color);
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.upload-button {
+    background-color: var(--secondary-color);
+    color: white;
+    padding: 15px 30px; /* 按鈕更大 */
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    display: inline-block;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.upload-button:hover {
+    background-color: #455a64; /* 深一點的藍灰色 */
+    transform: translateY(-3px);
+}
+
+.upload-button i {
+    margin-right: 10px;
+}
+
+.file-list {
+    margin-top: 25px;
+    text-align: left;
+    max-height: 180px; /* 列表更高 */
+    overflow-y: auto;
+    border: 1px solid var(--border-color);
+    padding: 15px;
+    border-radius: 8px;
+    background-color: #fcfcfc;
+}
+
+.file-list div {
+    padding: 8px 0;
+    border-bottom: 1px dashed #e0e0e0;
+}
+
+.file-list div:last-child {
+    border-bottom: none;
+}
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.05rem;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: 25px;
+    font-weight: 500;
+}
+
+.btn i {
+    margin-right: 8px;
+}
+
+.primary-btn {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.primary-btn:hover {
+    background-color: #303f9f;
+    transform: translateY(-3px);
+}
+
+.secondary-btn {
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+.secondary-btn:hover {
+    background-color: #455a64;
+    transform: translateY(-3px);
+}
+
+.export-btn {
+    background-color: var(--accent-color);
+    color: white;
+    margin-left: 15px;
+}
+
+.export-btn:hover {
+    background-color: #7cb342;
+    transform: translateY(-3px);
+}
+
+.danger-btn {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+.danger-btn:hover {
+    background-color: #d32f2f;
+}
+
+/* Tables */
+.table-responsive {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 25px;
+    background-color: var(--card-bg);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+table th, table td {
+    padding: 15px 18px; /* 更多內邊距 */
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+table th {
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: bold;
+    font-size: 1.05rem;
+}
+
+table tbody tr:nth-child(even) {
+    background-color: #f5f8f9; /* 淺色條紋 */
+}
+
+table tbody tr:hover {
+    background-color: #e0e0e0;
+}
+
+.action-buttons button {
+    background: none;
+    border: none;
+    color: var(--secondary-color);
+    cursor: pointer;
+    font-size: 1.2rem; /* 圖標更大 */
+    margin-right: 12px;
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.action-buttons button:hover {
+    color: var(--primary-color);
+    transform: scale(1.1);
+}
+
+.action-buttons .delete-btn {
+    color: var(--danger-color);
+}
+
+.action-buttons .delete-btn:hover {
+    color: #c62828;
+}
+
+/* Correction Results & Toolbar */
+.correction-results {
+    margin-top: 50px;
+    border-top: 2px solid var(--border-color);
+    padding-top: 35px;
+}
+
+.correction-results h3 {
+    color: var(--primary-color);
+    margin-bottom: 25px;
+    font-size: 1.6rem;
+    font-family: var(--font-family-heading);
+}
+
+.results-toolbar {
+    text-align: right;
+    margin-bottom: 20px;
+}
+
+/* Data Analysis Dashboard */
+.dashboard-widgets {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); /* 最小寬度稍大 */
+    gap: 25px; /* 間距更大 */
+    margin-top: 30px;
+}
+
+.dashboard-widgets .widget {
+    background-color: var(--card-bg);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.dashboard-widgets .widget h3 {
+    color: var(--secondary-color);
+    margin-bottom: 20px;
+    font-size: 1.4rem;
+    font-family: var(--font-family-heading);
+}
+
+.dashboard-widgets .widget h3 i {
+    margin-right: 10px;
+    color: var(--accent-color);
+}
+
+.widget.full-width {
+    grid-column: 1 / -1;
+}
+
+.filter-controls {
+    margin-bottom: 30px;
+    background-color: #e8f5e9; /* 淺綠色背景 */
+    padding: 25px;
+    border-radius: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: center;
+    box-shadow: inset 0 1px 5px rgba(0,0,0,0.05); /* 內陰影 */
+}
+
+.filter-controls label {
+    font-weight: bold;
+    color: var(--text-color);
+    font-size: 1.05rem;
+}
+
+.filter-controls select,
+.filter-controls input[type="date"] {
+    padding: 10px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    font-size: 1rem;
+    color: var(--text-color);
+}
+
+/* Account Settings */
+.settings-form .form-group {
+    margin-bottom: 20px;
+}
+
+.settings-form label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+    font-size: 1.05rem;
+}
+
+.settings-form input[type="password"],
+.settings-form input[type="text"] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    font-size: 1rem;
+    color: var(--text-color);
+}
+
+.permission-info {
+    margin-top: 40px;
+    padding-top: 25px;
+    border-top: 2px dashed var(--border-color);
+}
+
+.permission-info h3 {
+    color: var(--secondary-color);
+    margin-bottom: 20px;
+    font-family: var(--font-family-heading);
+}
+
+.permission-info ul {
+    list-style-type: '📖 '; /* 使用書本表情符號作為列表標記 */
+    margin-left: 25px;
+}
+
+.permission-info ul li {
+    margin-bottom: 8px;
+    padding-left: 5px; /* 與標記有點間距 */
+}
+
+
+/* Footer */
+footer {
+    background: #424242; /* 深灰 */
+    color: #e0e0e0;
+    text-align: center;
+    padding: 1.2rem 0;
+    margin-top: 40px;
+    font-size: 0.95rem;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.5); /* 更深的遮罩 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: var(--card-bg);
+    margin: auto;
+    padding: 40px; /* 更多內邊距 */
+    border: 1px solid #a7b9c0; /* 淺邊框 */
+    width: 95%;
+    max-width: 700px; /* 模態框更大 */
+    border-radius: 12px;
+    position: relative;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3); /* 更明顯的陰影 */
+    animation: fadeInScale 0.3s ease-out;
+}
+
+.close-button {
+    color: #9e9e9e;
+    font-size: 32px; /* 更大 */
+    top: 18px;
+    right: 25px;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: var(--danger-color);
+}
+
+.modal-content h2 {
+    color: var(--primary-color);
+    margin-bottom: 25px;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 12px;
+    font-size: 1.8rem;
+}
+
+.modal-content .form-group {
+    margin-bottom: 20px;
+}
+
+.modal-content label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+    font-size: 1.05rem;
+}
+
+.modal-content textarea,
+.modal-content select,
+.modal-content input[type="number"] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    font-size: 1rem;
+    color: var(--text-color);
+}
+
+.modal-content textarea[readonly] {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+}
+
+.ability-scores label {
+    display: inline-block;
+    width: 100px; /* 標籤固定寬度 */
+    margin-right: 10px;
+    margin-bottom: 5px;
+    font-weight: normal;
+}
+
+.ability-scores input {
+    width: 80px; /* 輸入框固定寬度 */
+    display: inline-block;
+    margin-bottom: 5px;
+}
+
+
+/* Responsive Design (RWD) - 保持基本響應式邏輯，根據新佈局調整 */
+@media (max-width: 768px) {
+    header nav ul li {
+        margin-left: 10px;
+    }
+
+    header nav {
+        float: none;
+        display: block;
+        text-align: center;
+        margin-top: 15px;
+    }
+
+    header h1 {
+        display: block;
+        text-align: center;
+        margin-right: 0;
+        margin-bottom: 15px;
+    }
+
+    .container {
+        width: 95%;
+        padding: 10px 0;
+    }
+
+    section {
+        padding: 25px;
+    }
+
+    h2 {
+        font-size: 1.6rem;
+    }
+
+    .upload-area {
+        padding: 30px;
+    }
+
+    .btn {
+        width: 100%;
+        margin-top: 15px;
+    }
+
+    table th, table td {
+        padding: 10px 12px;
+        font-size: 0.9rem;
+    }
+
+    .dashboard-widgets {
+        grid-template-columns: 1fr;
+    }
+
+    .filter-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filter-controls label,
+    .filter-controls select,
+    .filter-controls input,
+    .filter-controls button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 1.8rem;
+    }
+    header nav ul li {
+        display: block;
+        margin: 10px 0;
+    }
+    .modal-content {
+        padding: 25px;
+    }
+    .ability-scores label, .ability-scores input {
+        width: 100%;
+        display: block;
+    }
+}
