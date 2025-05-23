@@ -12,10 +12,11 @@
         <div class="container">
             <h1><i class="fas fa-feather-alt"></i> 翰墨雲評</h1> <nav>
                 <ul>
-                    <li><a href="#" id="batchUploadLink"><i class="fas fa-edit"></i> 批閱與評析</a></li>
-                    <li><a href="#" id="dataAnalysisLink"><i class="fas fa-chart-line"></i> 學情洞察</a></li>
-                    <li><a href="#" id="accountSettingsLink"><i class="fas fa-user-circle"></i> 個人設定</a></li>
-                    <li><a href="#" id="logoutLink"><i class="fas fa-sign-out-alt"></i> 登出</a></li>
+                    <li id="loginBtnListItem"><a href="#" id="loginBtn"><i class="fas fa-sign-in-alt"></i> 登入</a></li>
+                    <li class="main-menu-item menu-item-hidden"><a href="#" id="batchUploadLink"><i class="fas fa-edit"></i> 批閱與評析</a></li>
+                    <li class="main-menu-item menu-item-hidden"><a href="#" id="dataAnalysisLink"><i class="fas fa-chart-line"></i> 學情洞察</a></li>
+                    <li class="main-menu-item menu-item-hidden"><a href="#" id="accountSettingsLink"><i class="fas fa-user-circle"></i> 個人設定</a></li>
+                    <li class="main-menu-item menu-item-hidden"><a href="#" id="logoutLink"><i class="fas fa-sign-out-alt"></i> 登出</a></li>
                 </ul>
             </nav>
         </div>
@@ -34,7 +35,9 @@
             <div id="correctionResults" class="correction-results">
                 <h3>評閱結果一覽</h3>
                 <div class="results-toolbar">
-                    <button class="btn export-btn" id="exportFeedback"><i class="fas fa-file-word"></i> 匯出評閱意見</button> </div>
+                    <button id="toggleAiFeedbackBtn" class="btn secondary-btn"><i class="fas fa-eye-slash"></i> 顯示 AI 評析</button>
+                    <button class="btn export-btn" id="exportFeedback"><i class="fas fa-file-word"></i> 匯出評閱意見</button> 
+                </div>
                 <div class="table-responsive">
                     <table id="essayTable">
                         <thead>
