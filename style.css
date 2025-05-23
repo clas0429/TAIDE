@@ -84,6 +84,15 @@ header nav ul li a i {
     margin-right: 8px;
 }
 
+/* Menu item visibility classes for login/logout functionality */
+.menu-item-hidden {
+    display: none !important;
+}
+
+.menu-item-visible {
+    display: inline !important; /* Matches 'header nav ul li' default */
+}
+
 /* Main Content */
 main {
     padding: 25px 0;
@@ -166,6 +175,15 @@ button.upload-button {
 
 .upload-button i {
     margin-right: 10px;
+}
+
+/* Styles for AI-generated content in table */
+.ai-generated-content {
+    display: none; /* Hidden by default */
+}
+
+.ai-generated-content.visible {
+    display: table-cell; /* Show when .visible class is added */
 }
 
 .file-list {
@@ -447,7 +465,7 @@ footer {
     height: 100%;
     overflow: auto;
     background-color: rgba(0,0,0,0.5); /* 更深的遮罩 */
-    display: flex;
+    /* display: flex; /* This is set by JavaScript when the modal is shown */
     justify-content: center;
     align-items: center;
 }

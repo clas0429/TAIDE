@@ -1,9 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
     // 導航連結
+    const loginBtnListItem = document.getElementById('loginBtnListItem'); // Login button LI
+    const loginBtn = document.getElementById('loginBtn'); // Login button A
+    const mainMenuItems = document.querySelectorAll('.main-menu-item'); // Other main menu items
+
     const batchUploadLink = document.getElementById('batchUploadLink');
     const dataAnalysisLink = document.getElementById('dataAnalysisLink');
     const accountSettingsLink = document.getElementById('accountSettingsLink');
-    const logoutLink = document.getElementById('logoutLink');
+    const logoutLink = document.getElementById('logoutLink'); // This is one of the mainMenuItems
 
     // 區塊
     const batchUploadSection = document.getElementById('batchUploadSection');
@@ -12,10 +16,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 上傳相關元素
     const essayUpload = document.getElementById('essayUpload');
+    const imageUploadBtn = document.getElementById('imageUpload'); // Get reference to the new button
     const fileList = document.getElementById('fileList');
     const startCorrectionBtn = document.getElementById('startCorrection');
     const essayTableBody = document.querySelector('#essayTable tbody');
     const exportFeedbackBtn = document.getElementById('exportFeedback');
+    const toggleAiFeedbackBtn = document.getElementById('toggleAiFeedbackBtn'); // Toggle button
 
     // 模態視窗相關元素
     const feedbackModal = document.getElementById('feedbackModal');
@@ -39,6 +45,34 @@ document.addEventListener('DOMContentLoaded', () => {
     const exportDataReportBtn = document.getElementById('exportDataReport');
 
     let currentEditingRow = null; // 用於儲存目前正在編輯的表格行
+    let aiFeedbackVisible = false; // State for AI feedback visibility
+    let isLoggedIn = false; // Simulate login state
+
+    // --- Navbar Visibility Update ---
+    function updateNavbarVisibility() {
+        if (isLoggedIn) {
+            if (loginBtnListItem) {
+                loginBtnListItem.classList.add('menu-item-hidden');
+                loginBtnListItem.classList.remove('menu-item-visible');
+            }
+            mainMenuItems.forEach(item => {
+                item.classList.remove('menu-item-hidden');
+                item.classList.add('menu-item-visible');
+            });
+        } else {
+            if (loginBtnListItem) {
+                loginBtnListItem.classList.remove('menu-item-hidden');
+                loginBtnListItem.classList.add('menu-item-visible');
+            }
+            mainMenuItems.forEach(item => {
+                item.classList.add('menu-item-hidden');
+                item.classList.remove('menu-item-visible');
+            });
+            // When logged out, ensure no main section is active
+            document.querySelectorAll('main section.active-section').forEach(s => s.classList.remove('active-section'));
+            document.querySelectorAll('main section').forEach(s => s.classList.add('hidden-section'));
+        }
+    }
 
     // --- 導航功能 ---
     function showSection(sectionToShow) {
@@ -67,14 +101,35 @@ document.addEventListener('DOMContentLoaded', () => {
         showSection(accountSettingsSection);
     });
 
-    logoutLink.addEventListener('click', (e) => {
-        e.preventDefault();
-        alert('您已安全登出系統。'); // 實際應用中會導向登入頁面
-        // window.location.href = '/login';
-    });
+    if (loginBtn) {
+        loginBtn.addEventListener('click', (e) => {
+            e.preventDefault(); 
+            isLoggedIn = true;
+            updateNavbarVisibility();
+            showSection(batchUploadSection); // Show default section after login
+            alert('登入成功！'); 
+        });
+    }
+
+    if (logoutLink) {
+        logoutLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            isLoggedIn = false;
+            updateNavbarVisibility();
+            alert('您已安全登出系統。');
+            // Optional: Hide all main sections or show a logged-out home page
+            // Already handled by updateNavbarVisibility's else block
+        });
+    }
 
     // --- 檔案上傳與顯示 ---
     let uploadedFiles = [];
+
+    if (imageUploadBtn && essayUpload) {
+        imageUploadBtn.addEventListener('click', () => {
+            essayUpload.click(); // Programmatically click the hidden file input
+        });
+    }
 
     essayUpload.addEventListener('change', (event) => {
         fileList.innerHTML = ''; // 清空現有列表
@@ -190,19 +245,52 @@ document.addEventListener('DOMContentLoaded', () => {
             row.innerHTML = `
                 <td>${result.studentName}</td>
                 <td>${titleDisplay}</td>
-                <td class="grade">${result.grade}</td>
-                <td class="score">${result.score}</td>
-                <td class="feedback">${result.feedback.substring(0, 40)}...</td> <td class="action-buttons">
+                <td class="grade ai-generated-content">${result.grade}</td>
+                <td class="score ai-generated-content">${result.score}</td>
+                <td class="feedback ai-generated-content">${result.feedback.substring(0, 40)}...</td>
+                <td class="action-buttons">
                     <button class="edit-feedback-btn" title="補充/校正批閱意見"><i class="fas fa-marker"></i></button>
                     <button class="delete-btn" title="刪除評閱記錄"><i class="fas fa-trash-alt"></i></button>
                 </td>
             `;
+        });
+        
+        // Apply visibility state after table population
+        const allAiContentCellsOnTable = document.querySelectorAll('#essayTable .ai-generated-content');
+        allAiContentCellsOnTable.forEach(cell => {
+            if (aiFeedbackVisible) {
+                cell.classList.add('visible');
+            } else {
+                cell.classList.remove('visible'); // Ensure cells are hidden if state is false
+            }
         });
 
         // 綁定動態生成的按鈕事件
         bindCorrectionTableEvents();
         alert(`已完成 ${uploadedFiles.length} 篇作文的智慧評閱！`);
     });
+
+    if (toggleAiFeedbackBtn) {
+        toggleAiFeedbackBtn.addEventListener('click', () => {
+            aiFeedbackVisible = !aiFeedbackVisible; // Toggle the state
+            const aiContentCells = document.querySelectorAll('#essayTable .ai-generated-content');
+            
+            aiContentCells.forEach(cell => {
+                if (aiFeedbackVisible) {
+                    cell.classList.add('visible');
+                } else {
+                    cell.classList.remove('visible');
+                }
+            });
+
+            // Update button text and icon
+            if (aiFeedbackVisible) {
+                toggleAiFeedbackBtn.innerHTML = '<i class="fas fa-eye"></i> 隱藏 AI 評析'; // Icon: eye, Text: Hide
+            } else {
+                toggleAiFeedbackBtn.innerHTML = '<i class="fas fa-eye-slash"></i> 顯示 AI 評析'; // Icon: eye-slash, Text: Show
+            }
+        });
+    }
 
     function bindCorrectionTableEvents() {
         document.querySelectorAll('.edit-feedback-btn').forEach(button => {
@@ -595,4 +683,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     loadClasses();
+
+    // Initial UI setup based on login state
+    updateNavbarVisibility();
 });
