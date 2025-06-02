@@ -1,71 +1,125 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>翰墨雲評 - 高中作文批閱與學情分析系統</title>
+    <!--<title>翰墨雲評 - 高中作文批閱與學情分析系統</title>-->
+    <title>EDU-TAIDE作文教學評分系統</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
+
 <body>
     <header>
         <div class="container">
-            <h1><i class="fas fa-feather-alt"></i> 翰墨雲評</h1> <nav>
+            <h1><i class="fas fa-feather-alt"></i>EDU-TAIDE作文教學評分系統</h1>
+            <button id="menuToggle" class="menu-toggle" aria-label="切換選單">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <nav id="mainNav" class="hidden h4">
                 <ul>
-                    <li><a href="#" id="batchUploadLink"><i class="fas fa-edit"></i> 批閱與評析</a></li>
-                    <li><a href="#" id="dataAnalysisLink"><i class="fas fa-chart-line"></i> 學情洞察</a></li>
-                    <li><a href="#" id="accountSettingsLink"><i class="fas fa-user-circle"></i> 個人設定</a></li>
-                    <li><a href="#" id="logoutLink"><i class="fas fa-sign-out-alt"></i> 登出</a></li>
+                    <li><a href="#" id="batchUploadLink"><i class="fas fa-edit"></i>批閱評析</a></li>
+                    <li><a href="#" id="dataAnalysisLink"><i class="fas fa-chart-line"></i>學情洞察</a></li>
+                    <li><a href="#" id="studentManagementLink"><i class="fas fa-users-cog"></i>學生管理</a></li>
+                    <li><a href="#" id="auditLogLink"><i class="fas fa-clipboard-list"></i>操作記錄</a></li>
+                    <li><a href="#" id="accountSettingsLink"><i class="fas fa-user-circle"></i>個人設定</a></li>
+                    <li><a href="#" id="logoutLink"><i class="fas fa-sign-out-alt"></i>登出</a></li>
+                </ul>
+            </nav>
+            <nav id="authNav">
+                <ul>
+                    <li><a href="#" id="loginLink"><i class="fas fa-sign-in-alt"></i>登入</a></li>
                 </ul>
             </nav>
         </div>
     </header>
 
     <main class="container">
-        <section id="batchUploadSection" class="active-section">
-            <h2><i class="fas fa-scroll"></i> 作文批閱與評析</h2> <div class="upload-area">
+        <section id="loginSection" class="active-section">
+            <h2><i class="fas fa-sign-in-alt"></i> 歡迎登入</h2>
+            <div class="login-form">
+                <p>請輸入您的帳號與密碼以繼續。</p>
+                <div class="form-group">
+                    <label for="username">帳號：</label>
+                    <input type="text" id="username" placeholder="請輸入帳號" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">密碼：</label>
+                    <input type="password" id="password" placeholder="請輸入密碼" required>
+                </div>
+                <button id="loginBtn" class="btn primary-btn"><i class="fas fa-sign-in-alt"></i> 登入系統</button>
+            </div>
+        </section>
+
+
+        <section id="batchUploadSection" class="hidden-section">
+            <h2><i class="fas fa-scroll"></i> 作文批閱與評析</h2>
+            <div class="upload-area">
                 <p>將學生的作文稿件拖曳至此，或點擊選擇檔案。支援 .docx, .pdf, .txt, .jpg, .jpeg, .png 等格式。</p>
                 <input type="file" id="essayUpload" multiple accept=".docx,.pdf,.txt,.jpg,.jpeg,.png">
                 <label for="essayUpload" class="upload-button"><i class="fas fa-folder-open"></i> 選擇作文稿</label>
                 <button id="imageUpload" class="upload-button"><i class="fas fa-camera"></i> 拍照上傳辨識</button>
                 <div id="fileList" class="file-list"></div>
-                <button id="startCorrection" class="btn primary-btn"><i class="fas fa-stamp"></i> 開始智慧評閱</button> </div>
+                <button id="startCorrection" class="btn primary-btn"><i class="fas fa-stamp"></i> 開始智慧評閱</button>
+            </div>
 
             <div id="correctionResults" class="correction-results">
                 <h3>評閱結果一覽</h3>
                 <div class="results-toolbar">
-                    <button class="btn export-btn" id="exportFeedback"><i class="fas fa-file-word"></i> 匯出評閱意見</button> </div>
+                    <button id="toggleAiDetails" class="btn secondary-btn"><i class="fas fa-eye"></i> 顯示 AI 評析</button>
+                    <button id="exportFeedback"  class="btn export-btn"><i class="fas fa-file-word"></i> 匯出評閱意見</button>
+                </div>
                 <div class="table-responsive">
                     <table id="essayTable">
                         <thead>
                             <tr>
                                 <th>學生姓名</th>
                                 <th>作文題目</th>
-                                <th>AI 評等</th>
-                                <th>AI 分數</th>
-                                <th>AI 評語概要</th>
+                                <th class="ai-detail hidden-ai-detail">AI 評等</th>
+                                <th class="ai-detail hidden-ai-detail">AI 分數</th>
+                                <th class="ai-detail hidden-ai-detail">AI 評語概要</th>
                                 <th>操作</th>
                             </tr>
                         </thead>
                         <tbody>
-                            </tbody>
+                        </tbody>
                     </table>
                 </div>
             </div>
         </section>
 
         <section id="dataAnalysisSection" class="hidden-section">
-            <h2><i class="fas fa-brain"></i> 學情洞察與分析報告</h2> <p>此處將呈現班級整體評閱統計、學生寫作能力趨勢及個人學習軌跡。</p>
+            <h2><i class="fas fa-brain"></i> 學情洞察與分析報告</h2>
+            <p>此處將呈現班級整體評閱統計、學生寫作能力趨勢及個人學習軌跡。</p>
             <div class="filter-controls">
                 <label for="classSelect">班級選擇：</label>
                 <select id="classSelect">
                     <option value="all">所有班級</option>
-                    </select>
-                <label for="dateRange">評閱日期範圍：</label>
+                </select>
+                <label for="studentSelect">選擇學生：</label>
+                <select id="studentSelect"></select>
+
+                <label>評閱日期範圍：</label>
                 <input type="date" id="startDate"> - <input type="date" id="endDate">
                 <button class="btn secondary-btn" id="applyFilter"><i class="fas fa-search"></i> 篩選分析</button>
             </div>
             <div class="dashboard-widgets">
+                <!--
+                <div class="widget card">
+                    <h3>綜合評等分佈</h3>
+                    <canvas id="gradeDistributionChart"></canvas>
+                </div>
+                <div class="widget card">
+                    <h3>寫作能力指標平均分</h3>
+                    <canvas id="abilityScoresChart"></canvas>
+                </div>
+                <div class="widget card">
+                    <h3>AI評閱 vs 教師評閱分數對比</h3>
+                    <canvas id="scoreComparisonChart"></canvas>
+                </div>
+                -->
                 <div class="widget">
                     <h3><i class="fas fa-chart-pie"></i> 評等分佈圖</h3>
                     <canvas id="gradeDistributionChart"></canvas>
@@ -74,28 +128,122 @@
                     <h3><i class="fas fa-analytics"></i> 平均分數趨勢圖</h3>
                     <canvas id="scoreTrendChart"></canvas>
                 </div>
-                 <div class="widget">
+                <div class="widget">
                     <h3><i class="fas fa-lightbulb"></i> 寫作能力指標分析</h3>
-                    <canvas id="abilityScoreChart"></canvas> </div>
+                    <canvas id="abilityScoreChart"></canvas>
+                </div>
                 <div class="widget full-width">
-                    <h3><i class="fas fa-book-open"></i> 歷史評閱記錄</h3> <div class="table-responsive">
-                        <table id="historyTable">
+                    <h3><i class="fas fa-book-open"></i> 歷史評閱記錄</h3>
+                    <div class="table-responsive">
+                        <table id="reviewHistoryTable">
                             <thead>
                                 <tr>
                                     <th>評閱日期</th>
+                                    <th>班級</th>
                                     <th>學生姓名</th>
-                                    <th>作文題目</th>
-                                    <th>最終分數</th>
-                                    <th>最終評等</th>
-                                    <th>教師調整</th> <th>操作</th>
+                                    <th>作文標題</th>
+                                    <th>AI 評等</th>
+                                    <th>AI 分數</th>
+                                    <th>教師評等</th>
+                                    <th>教師分數</th>
+                                    <th>操作</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                </tbody>
+                            </tbody>
                         </table>
                     </div>
-                    <button class="btn export-btn" id="exportDataReport"><i class="fas fa-file-pdf"></i> 匯出學習成效報告</button> </div>
+                    <button class="btn export-btn" id="exportDataReport"><i class="fas fa-file-pdf"></i>
+                        匯出學習成效報告</button>
+                </div>
             </div>
+        </section>
+
+        <section id="studentManagementSection" class="hidden-section">
+            <h2><i class="fas fa-users-cog"></i> 學生管理</h2>
+            <p>在此處管理各班級的學生資料。</p>
+
+            <div class="student-manager-controls">
+                <div class="form-group">
+                    <label for="manageClassSelect">選擇班級：</label>
+                    <select id="manageClassSelect">
+                        <option value="">請選擇班級</option>
+                    </select>
+                </div>
+                <button class="btn secondary-btn" id="showAddStudentFormBtn"><i class="fas fa-user-plus"></i>
+                    新增學生</button>
+            </div>
+
+            <div id="addStudentForm" class="hidden-form form-card">
+                <h3><i class="fas fa-user-plus"></i> 新增學生資料</h3>
+                <div class="form-group">
+                    <label for="newStudentName">學生姓名：</label>
+                    <input type="text" id="newStudentName" placeholder="請輸入學生姓名" required>
+                </div>
+                <div class="form-group">
+                    <label for="newStudentNumber">學號 (選填)：</label>
+                    <input type="text" id="newStudentNumber" placeholder="學號">
+                </div>
+                <button class="btn primary-btn" id="saveNewStudentBtn"><i class="fas fa-save"></i> 儲存學生</button>
+                <button class="btn danger-btn" id="cancelAddStudentBtn"><i class="fas fa-times"></i> 取消</button>
+            </div>
+
+            <div class="student-list table-responsive">
+                <h3>班級學生列表 (<span id="currentClassName">請選擇班級</span>)</h3>
+                <table id="studentTable">
+                    <thead>
+                        <tr>
+                            <th>學號</th>
+                            <th>學生姓名</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="auditLogSection" class="hidden-section">
+            <h2><i class="fas fa-clipboard-list"></i> 操作記錄與稽核</h2>
+            <p>本系統僅供教學評量使用，請珍惜學生心血，請細心評改並適時給予鼓勵！</p>
+            <p class="warning-message"><i class="fas fa-exclamation-triangle"></i> 注意：所有操作皆會被記錄，請妥善保管帳密與學生資料。</p>
+
+            <div class="filter-controls">
+                <label for="auditDate">時間：</label>
+                <input type="date" id="auditDate">
+                <label for="teacherAccount">教師帳號：</label>
+                <input type="text" id="teacherAccount" placeholder="輸入帳號">
+                <label for="operationType">全部類型：</label>
+                <select id="operationType">
+                    <option value="all">全部類型</option>
+                    <option value="login">登入</option>
+                    <option value="upload">上傳</option>
+                    <option value="correct">批改</option>
+                    <option value="delete">刪除</option>
+                    <option value="export">匯出</option>
+                    <option value="download">下載</option>
+                    <option value="settings">個人設定</option>
+                </select>
+                <button class="btn secondary-btn" id="queryAuditLog"><i class="fas fa-search"></i> 查詢</button>
+                <button class="btn export-btn" id="exportAuditLog"><i class="fas fa-file-export"></i> 匯出記錄</button>
+            </div>
+
+            <div class="table-responsive">
+                <table id="auditLogTable">
+                    <thead>
+                        <tr>
+                            <th>時間</th>
+                            <th>帳號</th>
+                            <th>動作</th>
+                            <th>說明</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <p class="reminder-message"><i class="fas fa-bell"></i> 提醒：請定期備份評分資料與回饋，以保障學生學習成果！</p>
         </section>
 
         <section id="accountSettingsSection" class="hidden-section">
@@ -130,20 +278,66 @@
 
     <footer>
         <div class="container">
-            <p>&copy; 2025 翰墨雲評 - 專為國文老師設計的智慧批閱助手.</p>
+            <p>&copy; 2025 EDU-TAIDE作文教學評分系統</p>
         </div>
     </footer>
+
+    <div id="reviewDetailModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>評閱詳情</h2>
+            <div class="review-details-grid">
+                <div class="detail-section">
+                    <h3>基本資訊</h3>
+                    <p><strong>學生姓名：</strong> <span id="detailStudentName"></span></p>
+                    <p><strong>班級：</strong> <span id="detailClassName"></span></p>
+                    <p><strong>作文標題：</strong> <span id="detailEssayTitle"></span></p>
+                    <p><strong>評閱日期：</strong> <span id="detailReviewDate"></span></p>
+                </div>
+
+                <div class="detail-section">
+                    <h3>AI 評閱</h3>
+                    <p><strong>評等：</strong> <span id="detailAiGrade"></span></p>
+                    <p><strong>分數：</strong> <span id="detailAiScore"></span></p>
+                    <p><strong>評語：</strong> <span id="detailAiComments"></span></p>
+                    <h4>能力指標：</h4>
+                    <ul>
+                        <li><strong>審題立意：</strong> <span id="detailAiTopic"></span></li>
+                        <li><strong>內容組織：</strong> <span id="detailAiStructure"></span></li>
+                        <li><strong>遣詞造句：</strong> <span id="detailAiVocabulary"></span></li>
+                        <li><strong>錯別字/標點：</strong> <span id="detailAiMechanics"></span></li>
+                    </ul>
+                </div>
+
+                <div class="detail-section">
+                    <h3>教師評閱</h3>
+                    <p><strong>評等：</strong> <span id="detailTeacherGrade"></span></p>
+                    <p><strong>分數：</strong> <span id="detailTeacherScore"></span></p>
+                    <p><strong>評語：</strong> <span id="detailTeacherComments"></span></p>
+                    <h4>能力指標：</h4>
+                    <ul>
+                        <li><strong>審題立意：</strong> <span id="detailTeacherTopic"></span></li>
+                        <li><strong>內容組織：</strong> <span id="detailTeacherStructure"></span></li>
+                        <li><strong>遣詞造句：</strong> <span id="detailTeacherVocabulary"></span></li>
+                        <li><strong>錯別字/標點：</strong> <span id="detailTeacherMechanics"></span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div id="feedbackModal" class="modal">
         <div class="modal-content">
             <span class="close-button">&times;</span>
-            <h2><i class="fas fa-comment-dots"></i> 批閱意見補充與校正</h2> <div class="form-group">
+            <h2><i class="fas fa-comment-dots"></i> 批閱意見補充與校正</h2>
+            <div class="form-group">
                 <label for="originalFeedback">AI 生成原始評語：</label>
                 <textarea id="originalFeedback" rows="6" readonly></textarea>
             </div>
             <div class="form-group">
                 <label for="correctedFeedback">教師手動補充/校正評語：</label>
-                <textarea id="correctedFeedback" rows="8" placeholder="在此處填寫您的專業評語，例如：文章結構嚴謹，但立意可再拔高；遣詞造句優美，但部分詞語運用稍嫌重複。"></textarea>
+                <textarea id="correctedFeedback" rows="8"
+                    placeholder="在此處填寫您的專業評語，例如：文章結構嚴謹，但立意可再拔高；遣詞造句優美，但部分詞語運用稍嫌重複。"></textarea>
             </div>
             <div class="form-group">
                 <label for="correctedGrade">調整綜合評等：</label>
@@ -158,14 +352,18 @@
                 <label for="correctedScore">調整最終分數：</label>
                 <input type="number" id="correctedScore" min="0" max="100" placeholder="請輸入 0-100 之間的分數">
             </div>
-             <div class="form-group">
+            <div class="form-group">
                 <label>寫作能力指標細項調整：</label>
                 <div class="ability-scores">
-                    <label>審題立意:</label><input type="number" class="ability-input" data-ability="topic" min="1" max="5"><br>
-                    <label>內容組織:</label><input type="number" class="ability-input" data-ability="structure" min="1" max="5"><br>
-                    <label>遣詞造句:</label><input type="number" class="ability-input" data-ability="vocabulary" min="1" max="5"><br>
-                    <label>錯別字/標點:</label><input type="number" class="ability-input" data-ability="mechanics" min="1" max="5"><br>
-                    </div>
+                    <label>審題立意:</label><input type="number" class="ability-input" data-ability="topic" min="1"
+                        max="5"><br>
+                    <label>內容組織:</label><input type="number" class="ability-input" data-ability="structure" min="1"
+                        max="5"><br>
+                    <label>遣詞造句:</label><input type="number" class="ability-input" data-ability="vocabulary" min="1"
+                        max="5"><br>
+                    <label>錯別字/標點:</label><input type="number" class="ability-input" data-ability="mechanics" min="1"
+                        max="5"><br>
+                </div>
             </div>
             <button class="btn primary-btn" id="saveCorrection"><i class="fas fa-save"></i> 儲存校正並更新記錄</button>
         </div>
@@ -174,4 +372,5 @@
     <script src="script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
+
 </html>
