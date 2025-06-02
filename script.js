@@ -175,7 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // 模擬登入驗證
         if (username === 'a' && password === 'a') {
             isLoggedIn = true;
-            alert('登入成功！歡迎使用翰墨雲評系統。');
+            alert('登入成功！歡迎使用EDU-TAIDE作文教學評分系統。');
             checkLoginStatus();
             // 清空密碼欄位
             usernameInput.value = '';
